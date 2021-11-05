@@ -1,2 +1,2 @@
 # NumLang
-The NumLang programming language.
+A stack-oriented programming language written in python.
