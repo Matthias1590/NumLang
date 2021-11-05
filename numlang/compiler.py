@@ -73,7 +73,13 @@ class Compiler:
                 operation.data,
             )
             if isinstance(operation, TokenTypes.Operations.Push):
-                stack.push(arguments[0].value)
+                value = arguments[0]
+                if isinstance(value, TokenTypes.Literals.Numbers.Integer):
+                    stack.push(value.value)
+                elif isinstance(value, TokenTypes.Literals.String):
+                    stack.push(0)
+                    for char in value.value[::-1]:
+                        stack.push(ord(char))
             elif isinstance(operation, TokenTypes.Operations.Pop):
                 stack.pop()
             elif isinstance(operation, TokenTypes.Operations.Duplicate):
@@ -108,6 +114,38 @@ class Compiler:
                 continue
             elif isinstance(operation, TokenTypes.Keywords.End):
                 pass
+            elif isinstance(operation, TokenTypes.Operations.GreaterThan):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(b > a))
+            elif isinstance(operation, TokenTypes.Operations.LessThan):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(b < a))
+            elif isinstance(operation, TokenTypes.Operations.GreaterThanOrEqual):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(b >= a))
+            elif isinstance(operation, TokenTypes.Operations.LessThanOrEqual):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(b <= a))
+            elif isinstance(operation, TokenTypes.Operations.Equal):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(a == b))
+            elif isinstance(operation, TokenTypes.Operations.NotEqual):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(int(a != b))
+            elif isinstance(operation, TokenTypes.Operations.Write):
+                buffer = bytearray(256)
+                while True:
+                    char = stack.pop()
+                    if char == 0:
+                        break
+                    buffer.append(char)
+                print(buffer.decode("utf-8"))
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")
             program_counter += 1

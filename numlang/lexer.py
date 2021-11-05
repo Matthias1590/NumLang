@@ -201,6 +201,90 @@ class TokenTypes:
             - `a % b`.
             """
 
+        class GreaterThan(TokenType):
+            """
+            Determines if the second top value on the stack is greater than the top value on the stack.
+
+            Syntax: `>`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a > b`, else `0`.
+            """
+
+        class LessThan(TokenType):
+            """
+            Determines if the second top value on the stack is less than the top value on the stack.
+
+            Syntax: `<`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a < b`, else `0`.
+            """
+
+        class GreaterThanOrEqual(TokenType):
+            """
+            Determines if the second top value on the stack is greater than or equal to the top value on the stack.
+
+            Syntax: `>=`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a >= b`, else `0`.
+            """
+
+        class LessThanOrEqual(TokenType):
+            """
+            Determines if the second top value on the stack is less than or equal to the top value on the stack.
+
+            Syntax: `<=`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a <= b`, else `0`.
+            """
+
+        class Equal(TokenType):
+            """
+            Determines if the second top value on the stack is equal to the top value on the stack.
+
+            Syntax: `==`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a == b`, else `0`.
+            """
+
+        class NotEqual(TokenType):
+            """
+            Determines if the second top value on the stack is not equal to the top value on the stack.
+
+            Syntax: `!=`
+
+            Arguments:
+            - `a`: The first value to compare.
+            - `b`: The second value to compare.
+
+            Returns:
+            - `1` if `a != b`, else `0`.
+            """
+
         class Print(TokenType):
             """
             Prints the top number on the stack as a string.

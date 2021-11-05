@@ -1,8 +1,13 @@
-push(2) push(0) >
+push(1)
 if
-    push(1)
-    print
+    push("The if block will be executed if the top value on the stack is not 0.")
+    write
+end
+
+push(0)
+if
+    // ...
 else
-    push(0)
-    print
+    push("The else block will be executed if the top value on the stack is 0.")
+    write
 end
