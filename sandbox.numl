@@ -10,8 +10,9 @@ push(0) while dup push(10) < do
         dup print
 
         push(1) +
-    end
-    pop
+    end pop
 
     push(1) +
-end
+end pop
+
+print

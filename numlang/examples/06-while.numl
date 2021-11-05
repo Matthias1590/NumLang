@@ -5,7 +5,7 @@ while dup push(0) > do
     dup print // Print the number on the stack
 
     push(1) - // Subtract 1 from the number at the top of the stack
-end
+end pop
 
 // Nested while loop example
 push(0) while dup push(10) < do
@@ -19,8 +19,7 @@ push(0) while dup push(10) < do
         dup print
 
         push(1) +
-    end
-    pop // Pop the inner loop iter variable
+    end pop // Pop the inner loop iter variable
 
     push(1) +
-end
+end pop
