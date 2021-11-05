@@ -26,6 +26,9 @@ class Stack:
             self.pointer = self.size - 1
         return result
 
+    def __repr__(self) -> str:
+        return str(self.__stack)
+
 
 class Compiler:
     def __init__(self, operations: List[Token]) -> None:
@@ -45,7 +48,7 @@ class Compiler:
             elif isinstance(operation, TokenTypes.Operations.Pop):
                 stack.pop()
             else:
-                print(stack)
+                raise NotImplementedError(f"Operation {operation} not implemented")
 
         # Return with exit code 0
         return 0
