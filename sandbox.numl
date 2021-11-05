@@ -1,18 +1,8 @@
-// Nested while loop example
-push(0) while dup push(10) < do
-    push("outer iteration: ")
-    write
-    dup print
+// [25, 0]
+push(25) while dup push(0) >= do
+    push(30) store // Iteration variable is in memory[30], to use it, call `push(30) load`
 
-    push(0) while dup push(2) < do
-        push("inner iteration: ")
-        write
-        dup print
+    push(30) load print
 
-        push(1) +
-    end pop
-
-    push(1) +
+    push(30) load push(1) -
 end pop
-
-print

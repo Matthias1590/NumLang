@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "numlang",
             "args": [
-                "./numlang/examples/06-while.numl",
+                "sandbox.numl",
                 "simulate"
             ],
         }

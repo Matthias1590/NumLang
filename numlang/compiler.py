@@ -197,9 +197,17 @@ class Compiler:
             elif isinstance(operation, TokenTypes.Operations.Exit):
                 exit_code = stack.pop()
                 break
+            elif isinstance(operation, TokenTypes.Operations.Load):
+                address = stack.pop()
+                stack.push(memory[address])
+            elif isinstance(operation, TokenTypes.Operations.Store):
+                address = stack.pop()
+                value = stack.pop()
+                memory[address] = value
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")
             program_counter += 1
 
         # Return with the exit code and execution time
+        print(list(memory[:64]))
         return exit_code, time.time() - start

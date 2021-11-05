@@ -329,6 +329,32 @@ class TokenTypes:
             Returns: none
             """
 
+        class Load(TokenType):
+            """
+            Loads a byte from memory.
+
+            Syntax: `load`
+
+            Arguments:
+            - `address`: The address to load from.
+
+            Returns:
+            - `memory[address]`.
+            """
+
+        class Store(TokenType):
+            """
+            Stores a byte to memory.
+
+            Syntax: `store`
+
+            Arguments:
+            - `value`: The value to store.
+            - `address`: The address to store to.
+
+            Returns: none
+            """
+
     class Statements:
         """
         Statements are used to manipulate the program flow.
@@ -502,6 +528,8 @@ class Lexer:
             "do": TokenTypes.Statements.Do,
             "end": TokenTypes.Keywords.End,
             "exit": TokenTypes.Operations.Exit,
+            "load": TokenTypes.Operations.Load,
+            "store": TokenTypes.Operations.Store,
         }.get(word, None)
 
         if not type:
