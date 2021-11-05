@@ -8,12 +8,23 @@ import random
 class Stack:
     def __init__(self, size: int) -> None:
         self.size = size
-        self.__stack = [random.randint(0, 2 ** 32 - 1) for _ in range(self.size)]
+        self.__stack = [
+            random.randint(0, 2 ** 32 - 1) for _ in range(self.size)
+        ]  # Declaring __stack as a private variable to prevent it from being accessed outside of the class.
+        self.pointer = 0
 
-    def push(
-        self,
-    ) -> None:
-        ...
+    def push(self, value: int) -> None:
+        self.__stack[self.pointer] = value
+        self.pointer += 1
+        if self.pointer == len(self.__stack):
+            self.pointer = 0
+
+    def pop(self) -> int:
+        result = self.__stack[self.pointer]
+        self.pointer -= 1
+        if self.pointer == -1:
+            self.pointer = self.size - 1
+        return result
 
 
 class Compiler:
