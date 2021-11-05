@@ -115,6 +115,17 @@ class TokenTypes:
             def __init__(self, value: Literal) -> None:
                 super().__init__(value)
 
+        class Pop(TokenType):
+            """
+            Pops a value off the stack.
+
+            Syntax: `pop`
+
+            Arguments: none
+
+            Returns: none
+            """
+
         class Add(TokenType):
             """
             Adds the top two values on the stack.
@@ -214,6 +225,41 @@ class Lexer:
         self.column = 0
         self.index = 0
 
+    def preprocess(self) -> None:
+        # Mapping strings
+        string_map = {}
+        string_index = 0
+        in_string = False
+        string = ""
+        for i, line in enumerate(self.lines):
+            for j, char in enumerate(line):
+                if char == '"':
+                    in_string = not in_string
+                    if not in_string:
+                        string += char
+                        string_map[string_index] = string
+                        self.lines[i] = self.lines[i].replace(
+                            string, f"STRING_{string_index}", 1
+                        )
+                        string = ""
+                        string_index += 1
+                if in_string:
+                    string += char
+
+        # Removing comments
+        for i, line in enumerate(self.lines):
+            self.lines[i] = line.split("//")[0]
+
+        # Adding strings back in
+        for i, line in enumerate(self.lines):
+            for string in string_map:
+                self.lines[i] = self.lines[i].replace(
+                    f"STRING_{string}", string_map[string]
+                )
+
+        # Removing empty lines
+        self.lines = [line.rstrip() + "\n" for line in self.lines if line.strip()]
+
     def lex(self) -> List[Token]:
         tokens = []
 
@@ -228,6 +274,7 @@ class Lexer:
 
         type = {
             "push": TokenTypes.Operations.Push,
+            "pop": TokenTypes.Operations.Pop,
             "add": TokenTypes.Operations.Add,
             "sub": TokenTypes.Operations.Subtract,
             "mul": TokenTypes.Operations.Multiply,
@@ -237,7 +284,7 @@ class Lexer:
         }.get(word, None)
 
         if not type:
-            raise Exception(f"Unknown word: {word} at {location}")
+            raise Exception(f"Unknown word: {repr(word)} at {location}")
 
         try:
             return Token(type(*arguments), location)
@@ -322,6 +369,7 @@ class Lexer:
             # Add the character if we're in a string or if it's not whitespace
             if not char.isspace() or in_string:
                 word += char
+
         return self.parse_word(word)
 
     def read_char(self) -> str:

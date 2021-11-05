@@ -11,7 +11,8 @@
             "module": "numlang",
             "args": [
                 "./numlang/examples/01-basic-math.numl",
-                "--run"
+                "--run",
+                "simulate"
             ],
         }
     ]
