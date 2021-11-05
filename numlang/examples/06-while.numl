@@ -6,3 +6,21 @@ while dup push(0) > do
 
     push(1) - // Subtract 1 from the number at the top of the stack
 end
+
+// Nested while loop example
+push(0) while dup push(10) < do
+    push("outer iteration: ")
+    write
+    dup print
+
+    push(0) while dup push(2) < do
+        push("inner iteration: ")
+        write
+        dup print
+
+        push(1) +
+    end
+    pop
+
+    push(1) +
+end

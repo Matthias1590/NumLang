@@ -1,0 +1,17 @@
+// Nested while loop example
+push(0) while dup push(10) < do
+    push("outer iteration: ")
+    write
+    dup print
+
+    push(0) while dup push(2) < do
+        push("inner iteration: ")
+        write
+        dup print
+
+        push(1) +
+    end
+    pop
+
+    push(1) +
+end

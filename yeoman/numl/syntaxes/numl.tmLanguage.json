@@ -37,7 +37,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.numl",
-					"match": "\\b(if|else|while|end)\\b"
+					"match": "\\b(if|else|while|do|end)\\b"
 				}
 			]
 		},
