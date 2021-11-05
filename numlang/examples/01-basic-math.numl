@@ -1,0 +1,20 @@
+push(4)
+push(6)
+add
+print
+
+push(0x10)
+push(6)
+sub
+print
+
+push(0o24)
+push(2)
+div
+print
+pop // Pop the remainder
+
+push(2)
+push(0b101)
+mul
+print
