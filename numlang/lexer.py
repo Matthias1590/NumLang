@@ -317,6 +317,18 @@ class TokenTypes:
             Returns: none
             """
 
+        class Exit(TokenType):
+            """
+            Exits the program with the given exit code.
+
+            Syntax: `exit`
+
+            Arguments:
+            - `code`: The code to exit with.
+
+            Returns: none
+            """
+
     class Statements:
         """
         Statements are used to manipulate the program flow.
@@ -470,6 +482,7 @@ class Lexer:
             "if": TokenTypes.Statements.If,
             "else": TokenTypes.Statements.Else,
             "end": TokenTypes.Keywords.End,
+            "exit": TokenTypes.Operations.Exit,
         }.get(word, None)
 
         if not type:

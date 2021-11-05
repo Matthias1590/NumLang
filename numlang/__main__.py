@@ -47,4 +47,14 @@ if __name__ == "__main__":
             compiler.run()
     elif args.mode == "simulate":
         # Simulate the program
-        compiler.simulate()
+        code, execution_time = compiler.simulate()
+
+        execution_time_format = "s"
+
+        if execution_time < 1:
+            execution_time *= 1000
+            execution_time_format = "ms"
+
+        print(
+            f"\n\nProgram execution took {round(execution_time, 8):.8f}{execution_time_format}\nProgram exited with code {code}."
+        )

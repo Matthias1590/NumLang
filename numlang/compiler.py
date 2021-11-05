@@ -1,8 +1,8 @@
+import random
+import time
 from typing import List
 
-from .lexer import Token, Statement, TokenTypes
-
-import random
+from .lexer import Statement, Token, TokenTypes
 
 random.seed(350930)
 
@@ -70,6 +70,9 @@ class Compiler:
 
         # Set the program_counter to 0
         program_counter = 0
+
+        start = time.time()
+        exit_code = 0
 
         # Simulate the operations
         while program_counter < len(self.operations):
@@ -155,9 +158,12 @@ class Compiler:
                     if char == 0:
                         break
                 print(buffer.decode("utf-8"))
+            elif isinstance(operation, TokenTypes.Operations.Exit):
+                exit_code = stack.pop()
+                break
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")
             program_counter += 1
 
-        # Return with exit code 0
-        return 0
+        # Return with the exit code and execution time
+        return exit_code, time.time() - start

@@ -45,7 +45,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.function.numl",
-					"match": "\\b(push|print|dup|write|pop)\\b"
+					"match": "\\b(push|print|dup|write|pop|exit)\\b"
 				}
 			]
 		},
