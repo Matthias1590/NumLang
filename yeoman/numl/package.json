@@ -1,0 +1,25 @@
+{
+    "name": "numl",
+    "displayName": "NumLang",
+    "description": "NumLang program",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.62.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "numl",
+            "aliases": ["NumLang", "numl"],
+            "extensions": [".numl"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "numl",
+            "scopeName": "source.numl",
+            "path": "./syntaxes/numl.tmLanguage.json"
+        }]
+    }
+}

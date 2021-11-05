@@ -1,0 +1,33 @@
+/*
+
+// Equivalent of a do while loop
+push(1)
+while()
+    // ...
+
+    // Condition
+end
+
+// Normal while loop
+while(
+    // Condition
+)
+    // ...
+end
+
+*/
+
+// Example:
+
+push(5) // Push 5 onto the stack
+
+// While the top of the stack is greater than 0
+while
+(
+    dup // Duplicate so we don't actually modify the stack
+    push(0) > // Check if the number on the stack is greater than zero
+)
+    dup print // Print the number on the stack
+
+    push(1) - // Subtract 1 from the number at the top of the stack
+end

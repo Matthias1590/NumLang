@@ -1,0 +1,5 @@
+// Single line comments start with //
+
+/* Multline comments
+start with /*
+and end with */

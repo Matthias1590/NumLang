@@ -1,0 +1,69 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "NumLang",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#branching"
+		},
+		{
+			"include": "#instructions"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.block.numl",
+					"begin": "/\\*",
+					"end": "\\*/"
+				},
+				{
+					"name": "comment.line.numl",
+					"begin": "//",
+					"end": "\n"
+				}
+			]
+		},
+		"branching": {
+			"patterns": [
+				{
+					"name": "keyword.control.numl",
+					"match": "\\b(if|else|while|end)\\b"
+				}
+			]
+		},
+		"instructions": {
+			"patterns": [
+				{
+					"name": "entity.name.function.numl",
+					"match": "\\b(push|print|dup|add|sub|mul|div|write|pop)\\b"
+				}
+			]
+		},
+		"numbers": {
+			"name": "constant.numeric",
+			"match": "\\b(0x[0-9a-fA-F]+|0o[0-8]+|0b[0-1]+|[0-9]+(\\.[0-9]+)?)\\b"
+		},
+		"strings": {
+			"name": "string.quoted.double.numl",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.numl",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.numl"
+}

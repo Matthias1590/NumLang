@@ -1,0 +1,9 @@
+push(35) // Push adds a literal to the top of the stack
+dup // Dup duplicates the number at the top of the stack
+
+print // Prints the number at the top of the stack
+
+push(10)
+pop // Pop removes the number at the top of the stack
+
+print // Prints 35

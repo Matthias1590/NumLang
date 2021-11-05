@@ -51,6 +51,10 @@ class Literal:
         return repr(self.value)
 
 
+class Statement(TokenType):
+    ...
+
+
 class TokenTypes:
     class Literals:
         """
@@ -126,11 +130,25 @@ class TokenTypes:
             Returns: none
             """
 
+        class Duplicate(TokenType):
+            """
+            Duplicates the top value on the stack.
+
+            Syntax: `dup`
+
+            Arguments:
+            - `number`: The number to duplicate.
+
+            Returns:
+            - `number`: The given number.
+            - `number`: The given number duplicated.
+            """
+
         class Add(TokenType):
             """
             Adds the top two values on the stack.
 
-            Syntax: `add`
+            Syntax: `+`
 
             Arguments:
             - `a`: The first value to add.
@@ -144,7 +162,7 @@ class TokenTypes:
             """
             Subtracts the top two values on the stack.
 
-            Syntax: `sub`
+            Syntax: `-`
 
             Arguments:
             - `a`: The first value to subtract.
@@ -158,7 +176,7 @@ class TokenTypes:
             """
             Multiplies the top two values on the stack.
 
-            Syntax: `mul`
+            Syntax: `*`
 
             Arguments:
             - `a`: The first value to multiply.
@@ -172,7 +190,7 @@ class TokenTypes:
             """
             Divides the top two values on the stack.
 
-            Syntax: `div`
+            Syntax: `/`
 
             Arguments:
             - `a`: The first value to divide.
@@ -207,11 +225,56 @@ class TokenTypes:
             Returns: none
             """
 
+    class Statements:
+        """
+        Statements are used to manipulate the program flow.
+        """
+
+        class If(Statement):
+            """
+            If the top value on the stack is not 0, execute the code in the if block, else execute the code in the else block (if it exists)
+
+            Syntax:\n
+            ```numl
+            if
+                // Code
+            end
+            ```
+            """
+
+        class Else(Statement):
+            """
+            If the previous if block was not ran, the code within the else block will run.
+
+            Syntax:\n
+            ```numl
+            if
+                // Code
+            else
+                // Code
+            end
+            ```
+            """
+
+    class Keywords:
+        """
+        Keywords are used to manipulate the program flow.
+        """
+
+        class End(TokenType):
+            """
+            End a code block.
+
+            Syntax: `end`
+
+            """
+
 
 class Token:
     def __init__(self, type: TokenTypes, location: Location) -> None:
         self.type = type
         self.location = location
+        self.data = {}
 
     def __repr__(self) -> str:
         return repr(self.type)
@@ -246,9 +309,28 @@ class Lexer:
                 if in_string:
                     string += char
 
-        # Removing comments
+        # Removing single line comments (//)
         for i, line in enumerate(self.lines):
             self.lines[i] = line.split("//")[0]
+
+        # Removing multi line comments (/* and */)
+        code = ""
+        in_comment = False
+        previous_char = ""
+        for i, line in enumerate(self.lines):
+            for char in line:
+                if char == "*" and previous_char == "/":
+                    in_comment = True
+                    code = code[:-1]
+                elif char == "/" and previous_char == "*":
+                    in_comment = False
+                    continue
+                if not in_comment:
+                    code += char
+                previous_char = char
+        self.lines = code.splitlines()
+        # print("".join(code), self.lines)
+        # exit()
 
         # Adding strings back in
         for i, line in enumerate(self.lines):
@@ -264,23 +346,38 @@ class Lexer:
         tokens = []
 
         while self.token_available:
-            tokens.append(self.read_token())
+            token = self.read_token()
+            if token:
+                tokens.append(token)
 
         return tokens
 
     def parse_word(self, word: str) -> Token:
+        if word == "":
+            return None
+
         word, arguments = self.parse_arguments(word)
         location = Location(self.file, self.line, self.column)
 
         type = {
             "push": TokenTypes.Operations.Push,
             "pop": TokenTypes.Operations.Pop,
-            "add": TokenTypes.Operations.Add,
-            "sub": TokenTypes.Operations.Subtract,
-            "mul": TokenTypes.Operations.Multiply,
-            "div": TokenTypes.Operations.Divide,
+            "dup": TokenTypes.Operations.Duplicate,
+            "+": TokenTypes.Operations.Add,
+            "-": TokenTypes.Operations.Subtract,
+            "*": TokenTypes.Operations.Multiply,
+            "/": TokenTypes.Operations.Divide,
+            ">": TokenTypes.Operations.GreaterThan,
+            "<": TokenTypes.Operations.LessThan,
+            ">=": TokenTypes.Operations.GreaterThanOrEqual,
+            "<=": TokenTypes.Operations.LessThanOrEqual,
+            "==": TokenTypes.Operations.Equal,
+            "!=": TokenTypes.Operations.NotEqual,
             "print": TokenTypes.Operations.Print,
             "write": TokenTypes.Operations.Write,
+            "if": TokenTypes.Statements.If,
+            "else": TokenTypes.Statements.Else,
+            "end": TokenTypes.Keywords.End,
         }.get(word, None)
 
         if not type:

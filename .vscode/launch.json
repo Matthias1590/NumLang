@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "numlang",
             "args": [
-                "./numlang/examples/01-basic-math.numl",
+                "./numlang/examples/04-if-else.numl",
                 "--run",
                 "simulate"
             ],

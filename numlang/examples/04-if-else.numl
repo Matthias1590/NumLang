@@ -1,0 +1,8 @@
+push(2) push(0) >
+if
+    push(1)
+    print
+else
+    push(0)
+    print
+end
