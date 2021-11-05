@@ -43,7 +43,7 @@ class Compiler:
         self.operations = operations
 
     def cross_reference(self) -> None:
-        # Loop through all the operations in reverse order
+        # Loop through all the operations in reverse order (if and else)
         end_addresses = []
         program_counter = len(self.operations) - 1
         while program_counter >= 0:
@@ -55,6 +55,34 @@ class Compiler:
                 operation.data["end"] = end_addresses.pop()
                 end_addresses.append(program_counter)
             elif isinstance(operation.type, TokenTypes.Statements.If):
+                operation.data["end"] = end_addresses.pop()
+
+            program_counter -= 1
+
+        # Loop through all the operations (while)
+        while_addresses = []
+        end_addresses = []
+        program_counter = 0
+        while program_counter < len(self.operations):
+            operation = self.operations[program_counter]
+
+            if isinstance(operation.type, TokenTypes.Statements.While):
+                while_addresses.append(program_counter)
+            elif isinstance(operation.type, TokenTypes.Keywords.End):
+                operation.data["start"] = while_addresses.pop()
+                end_addresses.append(program_counter)
+
+            program_counter += 1
+
+        # Loop through all the operations in reverse order (do)
+        end_addresses = []
+        program_counter = len(self.operations) - 1
+        while program_counter >= 0:
+            operation = self.operations[program_counter]
+
+            if isinstance(operation.type, TokenTypes.Keywords.End):
+                end_addresses.append(program_counter)
+            elif isinstance(operation.type, TokenTypes.Statements.Do):
                 operation.data["end"] = end_addresses.pop()
 
             program_counter -= 1
@@ -101,7 +129,7 @@ class Compiler:
             elif isinstance(operation, TokenTypes.Operations.Add):
                 a = stack.pop()
                 b = stack.pop()
-                stack.push(a + b)
+                stack.push(b + a)
             elif isinstance(operation, TokenTypes.Operations.Subtract):
                 a = stack.pop()
                 b = stack.pop()
@@ -116,7 +144,7 @@ class Compiler:
                 stack.push(b % a)  # Remainder
                 stack.push(b // a)  # Result
             elif isinstance(operation, TokenTypes.Operations.Print):
-                print(stack.pop())
+                print(f"{stack.pop()}\n")
             elif isinstance(operation, TokenTypes.Statements.If):
                 if stack.pop() == 0:
                     program_counter = data["end"] + 1
@@ -124,8 +152,16 @@ class Compiler:
             elif isinstance(operation, TokenTypes.Statements.Else):
                 program_counter = data["end"]
                 continue
-            elif isinstance(operation, TokenTypes.Keywords.End):
+            elif isinstance(operation, TokenTypes.Statements.While):
                 pass
+            elif isinstance(operation, TokenTypes.Statements.Do):
+                if stack.pop() == 0:
+                    program_counter = data["end"] + 1
+                    continue
+            elif isinstance(operation, TokenTypes.Keywords.End):
+                if "start" in data:
+                    program_counter = data["start"]
+                    continue
             elif isinstance(operation, TokenTypes.Operations.GreaterThan):
                 a = stack.pop()
                 b = stack.pop()
@@ -145,11 +181,11 @@ class Compiler:
             elif isinstance(operation, TokenTypes.Operations.Equal):
                 a = stack.pop()
                 b = stack.pop()
-                stack.push(int(a == b))
+                stack.push(int(b == a))
             elif isinstance(operation, TokenTypes.Operations.NotEqual):
                 a = stack.pop()
                 b = stack.pop()
-                stack.push(int(a != b))
+                stack.push(int(b != a))
             elif isinstance(operation, TokenTypes.Operations.Write):
                 buffer = bytearray()
                 while True:

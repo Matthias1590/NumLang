@@ -360,6 +360,23 @@ class TokenTypes:
             ```
             """
 
+        class While(Statement):
+            """
+            Execute the code in the while block until the condition returns 0.
+
+            Syntax:\n
+            ```numl
+            while condition do
+                // Code
+            end
+            ```
+            """
+
+        class Do(Statement):
+            """
+            Starts a while block.
+            """
+
     class Keywords:
         """
         Keywords are used to manipulate the program flow.
@@ -481,6 +498,8 @@ class Lexer:
             "write": TokenTypes.Operations.Write,
             "if": TokenTypes.Statements.If,
             "else": TokenTypes.Statements.Else,
+            "while": TokenTypes.Statements.While,
+            "do": TokenTypes.Statements.Do,
             "end": TokenTypes.Keywords.End,
             "exit": TokenTypes.Operations.Exit,
         }.get(word, None)
