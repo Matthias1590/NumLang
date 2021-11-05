@@ -20,7 +20,7 @@ push(0) while dup push(10) < do
 
         push(1) +
     end
-    pop
+    pop // Pop the inner loop iter variable
 
     push(1) +
 end
