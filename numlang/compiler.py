@@ -6,6 +6,13 @@ import random
 
 random.seed(350930)
 
+_print = print
+
+
+def print(*args, **kwargs) -> None:
+    kwargs["end"] = ""
+    return _print(*args, **kwargs)
+
 
 class Stack:
     def __init__(self, size: int) -> None:
@@ -80,6 +87,8 @@ class Compiler:
                     stack.push(0)
                     for char in value.value[::-1]:
                         stack.push(ord(char))
+                elif isinstance(value, TokenTypes.Literals.Character):
+                    stack.push(ord(value.value))
             elif isinstance(operation, TokenTypes.Operations.Pop):
                 stack.pop()
             elif isinstance(operation, TokenTypes.Operations.Duplicate):
@@ -139,12 +148,12 @@ class Compiler:
                 b = stack.pop()
                 stack.push(int(a != b))
             elif isinstance(operation, TokenTypes.Operations.Write):
-                buffer = bytearray(256)
+                buffer = bytearray()
                 while True:
                     char = stack.pop()
+                    buffer.append(char)
                     if char == 0:
                         break
-                    buffer.append(char)
                 print(buffer.decode("utf-8"))
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")

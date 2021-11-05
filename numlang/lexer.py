@@ -94,7 +94,15 @@ class TokenTypes:
             """
 
             def __init__(self, value: Any) -> None:
-                super().__init__(value[1:-1])
+                super().__init__(eval(value))
+
+        class Character(Literal):
+            """
+            Used to represent a single character.
+            """
+
+            def __init__(self, value: Any) -> None:
+                super().__init__(eval(value))
 
     class Operations:
         """
@@ -479,6 +487,12 @@ class Lexer:
             )
         elif string.endswith('"') and string.startswith('"'):
             return TokenTypes.Literals.String(string)
+        elif (
+            string.endswith("'")
+            and string.startswith("'")
+            and (len(string) == 3 or (string[1] == "\\" and len(string) == 4))
+        ):
+            return TokenTypes.Literals.Character(string)
         elif number_type := get_number_type(string):
             return number_type(string)
         elif string.endswith(")"):

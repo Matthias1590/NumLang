@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "NumLang",
             "type": "python",
             "request": "launch",
             "module": "numlang",
             "args": [
-                "./numlang/examples/04-if-else.numl",
+                "sandbox.numl",
                 "--run",
                 "simulate"
             ],

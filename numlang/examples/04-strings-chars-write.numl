@@ -1,0 +1,22 @@
+push("You can push string literals to the stack, when pushing strings, first a zero character will be pushed, then the characters will be pushed to the stack one by one in reverse order.\n")
+write
+
+push("To read and print a null terminated string from the stack, you can use the write instruction, it will pop from the stack and load the values into a buffer until it encounters a zero, then it prints the buffer.\n")
+write
+
+push("\nThe 'a' character: ")
+write
+push('a') // 97
+print
+
+push("\n\nTwo newline characters:\n")
+write
+
+push(0) // End of the string
+push('\n') // 10
+write
+
+// Is the same as
+
+push("\n")
+write

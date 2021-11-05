@@ -45,13 +45,25 @@
 			"patterns": [
 				{
 					"name": "entity.name.function.numl",
-					"match": "\\b(push|print|dup|add|sub|mul|div|write|pop)\\b"
+					"match": "\\b(push|print|dup|write|pop)\\b"
 				}
 			]
 		},
 		"numbers": {
-			"name": "constant.numeric",
+			"name": "constant.numeric.numl",
 			"match": "\\b(0x[0-9a-fA-F]+|0o[0-8]+|0b[0-1]+|[0-9]+(\\.[0-9]+)?)\\b"
+		},
+		"characters": {
+			"patterns": [
+				{
+					"name": "constant.character.numl",
+					"match": "\\'[^\\']{1}\\'"
+				},
+				{
+					"name": "constant.character.escape",
+					"match": "\\'\\.{1}\\'"
+				}
+			]
 		},
 		"strings": {
 			"name": "string.quoted.double.numl",
