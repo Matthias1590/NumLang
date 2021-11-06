@@ -12,11 +12,45 @@ print
 push("\n\nTwo newline characters:\n")
 write
 
-push(0) // End of the string
-push('\n') // 10
+push(0)     // End of the string
+push('\n')  // 10
 write
 
 // Is the same as
 
 push("\n")
+write
+
+
+// Storing a string in memory
+push("\nStoring a string in memory.\n")
+write
+
+push("Hello!") // "Hello!" contains 6 characters and 1 null terminator so it has a total size of 7 bytes
+
+// We have to store 7 bytes so we use a while loop
+push(0) while dup push(7) < do
+    push(1000) store // We store the loop variable at address 1000
+
+    push(1000) load // Use the loop variable as the address
+    store
+
+    push(1000) load push(1) + // Increment the loop variable
+end pop
+
+// We now have the string in memory at address 0
+
+// To load it from memory again we use another while loop
+// (NOTE: Instead of using 6 and >= we can also use 7 and > and just decrement the loop
+//  variable inside the loop body whenever we want to use it to get the same result)
+push(6) while dup push(0) >= do
+    push(1000) store // We store the loop variable at address 1000
+
+    push(1000) load // Use the loop variable as the address
+    load // Load the value at the address
+
+    push(1000) load push(1) - // Decrement the loop variable
+end pop
+
+// Now we can write the string again!
 write

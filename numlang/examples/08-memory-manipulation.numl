@@ -1,0 +1,37 @@
+push(17)    // Push age
+push(0)     // Push address
+store       // Store the age at the address
+
+// Pushing random values to populate the stack
+push(25)
+push(74)
++
+push(64)
+-
+push(7)
+push(12)
+
+push(0)     // Push address
+load        // Load the age at the address
+print       // Print the age
+
+// To store numbers that are bigger than 255 you can use multiple bytes like this:
+push(256)   // Push 256 (1 0000 0000 in binary, it takes up more than one byte)
+push(0)     // Push address
+store(2)    // Store 2 bytes at the address (NOTE: If you only store 1 byte, the value will be truncated)
+
+// To load it back:
+push(0)     // Push address
+load(2)     // Load 2 bytes at the address
+print       // Print the number
+
+
+// How storing/loading multiple bytes works (example below loads 2 bytes, bytes are stored and loaded using the little-endian convention):
+push(1)     // Push address of the second byte
+load        // Load the first byte
+push(8) <<  // Shift the byte left by one byte
+
+push(0)     // Push address of the first byte
+load        // Load the second byte
++           // Add the two bytes together (NOTE: This is the same as using bitwise or since after we shift the first byte, the lower 8 bits will all be 0)
+print       // Print the number

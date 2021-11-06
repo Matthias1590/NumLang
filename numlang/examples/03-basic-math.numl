@@ -2,21 +2,21 @@
 
 push(4)
 push(6)
-+ // Add 4 and 6
++            // Add 4 and 6
 print
 
-push(0x10) // Hexadecimal literals are supported
+push(0x10)   // Hexadecimal literals are supported
 push(6)
-- // Subtract 6 from 16
+-            // Subtract 6 from 16
 print
 
-push(0o24) // Octal literals are supported
+push(0o24)   // Octal literals are supported
 push(2)
-/ // Divide 20 by 2
-print
-pop // Pop the remainder
+/            // Divide 20 by 2
+print        // Print the result
+pop          // Pop the remainder
 
-push(0b101) // Binary literals are supported
+push(0b101)  // Binary literals are supported
 push(2)
-* // Multiply 10 by 2
+*            // Multiply 10 by 2
 print

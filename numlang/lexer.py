@@ -333,27 +333,35 @@ class TokenTypes:
             """
             Loads a byte from memory.
 
-            Syntax: `load`
+            Syntax: `load(bytes)`
 
             Arguments:
+            - `bytes`: The amount of bytes to load.
             - `address`: The address to load from.
 
             Returns:
             - `memory[address]`.
             """
 
+            def __init__(self, bytes: int = 1) -> None:
+                super().__init__(int(repr(bytes)))
+
         class Store(TokenType):
             """
             Stores a byte to memory.
 
-            Syntax: `store`
+            Syntax: `store(bytes)`
 
             Arguments:
+            - `bytes`: The amount of bytes to store.
             - `value`: The value to store.
             - `address`: The address to store to.
 
             Returns: none
             """
+
+            def __init__(self, bytes: int = 1) -> None:
+                super().__init__(int(repr(bytes)))
 
         class BitwiseOr(TokenType):
             """

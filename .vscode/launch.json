@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "numlang",
             "args": [
-                "./numlang/examples/07-bitwise-operations.numl",
+                "./numlang/examples/04-strings-chars-write.numl", // ./numlang/examples/08-memory-manipulation.numl
                 "simulate"
             ],
         }

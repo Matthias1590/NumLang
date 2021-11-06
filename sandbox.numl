@@ -1,14 +1,13 @@
-/*
-// [25, 0]
-push(25) while dup push(0) >= do
-    push(30) store // Iteration variable is in memory[30], to use it, call `push(30) load`
+// To store numbers that are bigger than 255 you can use multiple bytes like this:
+push(257) // Push 257 (1 0000 0001 in binary, it takes up more than one byte)
+push(0)   // Push address
+store(2)  // Store 2 bytes at the address (NOTE: If you only store 1 byte, the value will be truncated)
 
-    push(30) load print
-
-    push(30) load push(1) -
-end pop
-*/
-
-push(69) push(0) store
-push(420) push(1) store
-print
+// To load it back:
+push(0)   // Push address
+load      // Load 1 byte at the address
+push(8) << // Shift the byte left one byte
+push(1)
+load
++
+print     // Print the number

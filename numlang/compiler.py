@@ -199,11 +199,21 @@ class Compiler:
                 break
             elif isinstance(operation, TokenTypes.Operations.Load):
                 address = stack.pop()
-                stack.push(memory[address])
+                value = 0
+
+                bytes_to_store = arguments[0]
+                for i in range(bytes_to_store):
+                    value = (value << 8) + memory[address + (bytes_to_store - 1) - i]
+
+                stack.push(value)
             elif isinstance(operation, TokenTypes.Operations.Store):
                 address = stack.pop()
                 value = stack.pop()
-                memory[address] = value
+
+                bytes_to_store = arguments[0]
+                for i in range(bytes_to_store):
+                    memory[address + i] = value & 0xFF
+                    value >>= 8
             elif isinstance(operation, TokenTypes.Operations.BitwiseOr):
                 a = stack.pop()
                 b = stack.pop()
