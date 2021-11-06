@@ -1,0 +1,11 @@
+// Bitwise and
+push(1) push(2) | print // 3
+
+// Bitwise or
+push(1) push(2) & print // 0
+
+// Bitshift right
+push(15) push(2) >> print // 3
+
+// Bitshift left
+push(1) push(2) << print // 4

@@ -355,6 +355,62 @@ class TokenTypes:
             Returns: none
             """
 
+        class BitwiseOr(TokenType):
+            """
+            Bitwise ORs the top two values on the stack.
+
+            Syntax: `|`
+
+            Arguments:
+            - `a`: The first value to OR.
+            - `b`: The second value to OR.
+
+            Returns:
+            - `a | b`.
+            """
+
+        class BitwiseAnd(TokenType):
+            """
+            Bitwise ANDs the top two values on the stack.
+
+            Syntax: `&`
+
+            Arguments:
+            - `a`: The first value to AND.
+            - `b`: The second value to AND.
+
+            Returns:
+            - `a & b`.
+            """
+
+        class ShiftLeft(TokenType):
+            """
+            Shifts the top value on the stack left by the given number of bits.
+
+            Syntax: `<<`
+
+            Arguments:
+            - `a`: The value to shift.
+            - `b`: The number of bits to shift.
+
+            Returns:
+            - `a << b`.
+            """
+
+        class ShiftRight(TokenType):
+            """
+            Shifts the top value on the stack right by the given number of bits.
+
+            Syntax: `>>`
+
+            Arguments:
+            - `a`: The value to shift.
+            - `b`: The number of bits to shift.
+
+            Returns:
+            - `a >> b`.
+            """
+
     class Statements:
         """
         Statements are used to manipulate the program flow.
@@ -476,8 +532,6 @@ class Lexer:
                     code += char
                 previous_char = char
         self.lines = code.splitlines()
-        # print("".join(code), self.lines)
-        # exit()
 
         # Adding strings back in
         for i, line in enumerate(self.lines):
@@ -520,6 +574,10 @@ class Lexer:
             "<=": TokenTypes.Operations.LessThanOrEqual,
             "==": TokenTypes.Operations.Equal,
             "!=": TokenTypes.Operations.NotEqual,
+            "|": TokenTypes.Operations.BitwiseOr,
+            "&": TokenTypes.Operations.BitwiseAnd,
+            "<<": TokenTypes.Operations.ShiftLeft,
+            ">>": TokenTypes.Operations.ShiftRight,
             "print": TokenTypes.Operations.Print,
             "write": TokenTypes.Operations.Write,
             "if": TokenTypes.Statements.If,

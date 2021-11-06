@@ -204,10 +204,25 @@ class Compiler:
                 address = stack.pop()
                 value = stack.pop()
                 memory[address] = value
+            elif isinstance(operation, TokenTypes.Operations.BitwiseOr):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(b | a)
+            elif isinstance(operation, TokenTypes.Operations.BitwiseAnd):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(b & a)
+            elif isinstance(operation, TokenTypes.Operations.ShiftLeft):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(b << a)
+            elif isinstance(operation, TokenTypes.Operations.ShiftRight):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(b >> a)
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")
             program_counter += 1
 
         # Return with the exit code and execution time
-        print(list(memory[:64]))
         return exit_code, time.time() - start
