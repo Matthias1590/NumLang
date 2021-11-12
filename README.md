@@ -54,4 +54,4 @@ push(0) while dup push(1000) < do
 end pop
 ```
 
-For more examples, take a look at the numlang/examples folder.
+For more examples, take a look at the `numlang/examples` folder.
