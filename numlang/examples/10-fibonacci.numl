@@ -1,0 +1,15 @@
+var(a, 4)
+var(b, 4) push(1) b store
+var(c, 4)
+
+push(0) while b load push(100) < do
+    b load print
+
+    a load c store // Store a in c
+
+    b load a store // Store b in a
+
+    c load b load + b store // Add c to b
+
+    push(1) +
+end pop

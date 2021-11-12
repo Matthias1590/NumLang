@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "numlang",
             "args": [
-                "./numlang/examples/09-variables.numl", // ./numlang/examples/09-variables.numl
+                "./numlang/examples/10-fibonacci.numl", // ./numlang/examples/09-variables.numl
                 "simulate"
             ],
         }

@@ -113,7 +113,7 @@ class Compiler:
 
         variable_map = {}
         variable_pointer = 0
-        last_variable = None
+        last_variables = []
 
         # Simulate the operations
         while program_counter < len(self.operations):
@@ -218,8 +218,7 @@ class Compiler:
                 if arguments:
                     bytes_to_store = int(repr(arguments[0]))
                 else:
-                    bytes_to_store = last_variable[0]
-                    last_variable = None
+                    bytes_to_store = last_variables.pop()[0]
                 for i in range(bytes_to_store):
                     value = (value << 8) + memory[address + (bytes_to_store - 1) - i]
 
@@ -231,8 +230,7 @@ class Compiler:
                 if arguments:
                     bytes_to_store = int(repr(arguments[0]))
                 else:
-                    bytes_to_store = last_variable[0]
-                    last_variable = None
+                    bytes_to_store = last_variables.pop()[0]
                 for i in range(bytes_to_store):
                     memory[address + i] = value & 0xFF
                     value >>= 8
@@ -257,7 +255,7 @@ class Compiler:
                 variable_pointer += arguments[1]
             elif isinstance(operation, TokenTypes.Misc.Variable):
                 stack.push(variable_map[word][1])
-                last_variable = variable_map[word]
+                last_variables.append(variable_map[word])
             elif isinstance(operation, TokenTypes.Operations.Modulo):
                 a = stack.pop()
                 b = stack.pop()
