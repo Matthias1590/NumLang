@@ -209,6 +209,20 @@ class TokenTypes:
             - `a % b`.
             """
 
+        class Modulo(TokenType):
+            """
+            Divides the top two values on the stack.
+
+            Syntax: `%`
+
+            Arguments:
+            - `a`: The first value to divide.
+            - `b`: The second value to divide.
+
+            Returns:
+            - `a % b`.
+            """
+
         class GreaterThan(TokenType):
             """
             Determines if the second top value on the stack is greater than the top value on the stack.
@@ -343,9 +357,6 @@ class TokenTypes:
             - `memory[address]`.
             """
 
-            def __init__(self, bytes: int = 1) -> None:
-                super().__init__(int(repr(bytes)))
-
         class Store(TokenType):
             """
             Stores a byte to memory.
@@ -359,9 +370,6 @@ class TokenTypes:
 
             Returns: none
             """
-
-            def __init__(self, bytes: int = 1) -> None:
-                super().__init__(int(repr(bytes)))
 
         class BitwiseOr(TokenType):
             """
@@ -418,6 +426,22 @@ class TokenTypes:
             Returns:
             - `a >> b`.
             """
+
+        class CreateVariable(TokenType):
+            """
+            Creates a variable with a given name and size.
+
+            Syntax: `var(name, size)`
+
+            Arguments:
+            - `name`: The name of the variable.
+            - `size`: The size of the variable.
+
+            Returns: none
+            """
+
+            def __init__(self, *arguments: List[Any]) -> None:
+                super().__init__(arguments[0], int(arguments[1]))
 
     class Statements:
         """
@@ -480,11 +504,18 @@ class TokenTypes:
 
             """
 
+    class Misc:
+        class Variable(TokenType):
+            """
+            A variable that can be used in the program, referencing it will cause it's address to be pushed onto the stack.
+            """
+
 
 class Token:
-    def __init__(self, type: TokenTypes, location: Location) -> None:
+    def __init__(self, type: TokenTypes, location: Location, word: str) -> None:
         self.type = type
         self.location = location
+        self.word = word
         self.data = {}
 
     def __repr__(self) -> str:
@@ -498,6 +529,7 @@ class Lexer:
         self.line = 0
         self.column = 0
         self.index = 0
+        self.variable_map = {}
 
     def preprocess(self) -> None:
         # Mapping strings
@@ -586,6 +618,7 @@ class Lexer:
             "&": TokenTypes.Operations.BitwiseAnd,
             "<<": TokenTypes.Operations.ShiftLeft,
             ">>": TokenTypes.Operations.ShiftRight,
+            "%": TokenTypes.Operations.Modulo,
             "print": TokenTypes.Operations.Print,
             "write": TokenTypes.Operations.Write,
             "if": TokenTypes.Statements.If,
@@ -596,13 +629,16 @@ class Lexer:
             "exit": TokenTypes.Operations.Exit,
             "load": TokenTypes.Operations.Load,
             "store": TokenTypes.Operations.Store,
+            "var": TokenTypes.Operations.CreateVariable,
         }.get(word, None)
 
         if not type:
+            if word in self.variable_map:
+                return Token(TokenTypes.Misc.Variable(*arguments), location, word)
             raise Exception(f"Unknown word: {repr(word)} at {location}")
 
         try:
-            return Token(type(*arguments), location)
+            return Token(type(*arguments), location, word)
         except TypeError as e:
             raise Exception(f"Invalid arguments for {word} at {location}: {e}")
 
@@ -625,12 +661,19 @@ class Lexer:
             raise Exception(
                 f"Unmatched parenthesis at {Location(self.file, self.line, self.column)}"
             )
+        elif string in self.variable_map:
+            return self.variable_map[string]
         else:
             raise Exception(
                 f'Unknown value: "{string}" at {Location(self.file, self.line, self.column)}'
             )
 
     def parse_arguments(self, word: str) -> Tuple[str, List[str]]:
+        if word.split("(")[0] == "var":
+            variable_name, variable_size = word.split("(")[1].split(")")[0].split(",")
+            self.variable_map[variable_name] = [variable_size]
+            return word.split("(")[0], [variable_name, variable_size]
+
         arguments = []
 
         if "(" in word and ")" in word:

@@ -23,3 +23,5 @@ push(0) while dup push(10) < do
 
     push(1) +
 end pop
+
+// To use varriables in the while loop, take a look at 09-variables.numl

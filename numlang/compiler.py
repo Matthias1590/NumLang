@@ -50,12 +50,16 @@ class Compiler:
             operation = self.operations[program_counter]
 
             if isinstance(operation.type, TokenTypes.Keywords.End):
-                end_addresses.append(program_counter)
+                end_addresses.append((program_counter, operation))
             elif isinstance(operation.type, TokenTypes.Statements.Else):
-                operation.data["end"] = end_addresses.pop()
-                end_addresses.append(program_counter)
+                end = end_addresses.pop()
+                operation.data["end"] = end[0]
+                end[1].data["used"] = True
+                end_addresses.append((program_counter, operation))
             elif isinstance(operation.type, TokenTypes.Statements.If):
-                operation.data["end"] = end_addresses.pop()
+                end = end_addresses.pop()
+                operation.data["end"] = end[0]
+                end[1].data["used"] = True
 
             program_counter -= 1
 
@@ -68,7 +72,11 @@ class Compiler:
 
             if isinstance(operation.type, TokenTypes.Statements.While):
                 while_addresses.append(program_counter)
-            elif isinstance(operation.type, TokenTypes.Keywords.End):
+            elif (
+                isinstance(operation.type, TokenTypes.Keywords.End)
+                and while_addresses
+                and not operation.data.get("used", False)
+            ):
                 operation.data["start"] = while_addresses.pop()
                 end_addresses.append(program_counter)
 
@@ -81,7 +89,8 @@ class Compiler:
             operation = self.operations[program_counter]
 
             if isinstance(operation.type, TokenTypes.Keywords.End):
-                end_addresses.append(program_counter)
+                if not operation.data.get("used", False):
+                    end_addresses.append(program_counter)
             elif isinstance(operation.type, TokenTypes.Statements.Do):
                 operation.data["end"] = end_addresses.pop()
 
@@ -102,10 +111,15 @@ class Compiler:
         start = time.time()
         exit_code = 0
 
+        variable_map = {}
+        variable_pointer = 0
+        last_variable = None
+
         # Simulate the operations
         while program_counter < len(self.operations):
-            operation = self.operations[program_counter]
-            operation, arguments, data = (
+            operation: Token = self.operations[program_counter]
+            word, operation, arguments, data = (
+                operation.word,
                 operation.type,
                 operation.type.arguments,
                 operation.data,
@@ -201,7 +215,11 @@ class Compiler:
                 address = stack.pop()
                 value = 0
 
-                bytes_to_store = arguments[0]
+                if arguments:
+                    bytes_to_store = int(repr(arguments[0]))
+                else:
+                    bytes_to_store = last_variable[0]
+                    last_variable = None
                 for i in range(bytes_to_store):
                     value = (value << 8) + memory[address + (bytes_to_store - 1) - i]
 
@@ -210,7 +228,11 @@ class Compiler:
                 address = stack.pop()
                 value = stack.pop()
 
-                bytes_to_store = arguments[0]
+                if arguments:
+                    bytes_to_store = int(repr(arguments[0]))
+                else:
+                    bytes_to_store = last_variable[0]
+                    last_variable = None
                 for i in range(bytes_to_store):
                     memory[address + i] = value & 0xFF
                     value >>= 8
@@ -230,6 +252,16 @@ class Compiler:
                 a = stack.pop()
                 b = stack.pop()
                 stack.push(b >> a)
+            elif isinstance(operation, TokenTypes.Operations.CreateVariable):
+                variable_map[arguments[0]] = (arguments[1], variable_pointer)
+                variable_pointer += arguments[1]
+            elif isinstance(operation, TokenTypes.Misc.Variable):
+                stack.push(variable_map[word][1])
+                last_variable = variable_map[word]
+            elif isinstance(operation, TokenTypes.Operations.Modulo):
+                a = stack.pop()
+                b = stack.pop()
+                stack.push(b % a)
             else:
                 raise NotImplementedError(f"Operation {operation} not implemented")
             program_counter += 1

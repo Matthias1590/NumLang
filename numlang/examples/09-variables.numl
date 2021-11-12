@@ -1,0 +1,24 @@
+var(age, 1) // Create a variable called age with a size of 1 byte (will be located at address 0)
+
+push(17) age store // Store 17 in the variable age
+
+age load // Load the value stored in age
+
+print // Print the value stored in age
+
+
+// Variables can be used in loops to keep track of the current iteration
+var(i, 2) // Create a variable called i with a size of 3 bytes (will be located at address 1)
+push(0) while dup push(1000) < do
+    i store // Store the current iteration in i
+
+    // Print the number if it is odd
+    // i load push(2) %
+    // if
+    //     i load print
+    // end
+
+    i load print
+
+    i load push(1) + // Increment i
+end pop
